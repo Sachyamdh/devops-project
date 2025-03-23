@@ -1,7 +1,7 @@
 \pipeline{
 	agent any
 	stages{
-	stage("verifying tooling){
+	stage("verifying tooling"){
 	steps {
 	sh '''
 		doker version
@@ -21,6 +21,15 @@ stage("Start container"){
 	sh 'docker compose up -d --no-color --wait'
 	sh 'docker compose ps'
 }
+stage("Check Response"){
+	sh 'curl httpl:://localhost:8080'
+}
+post{{always{
+	sh
+	'''
+		docker compose down --remove-orphans -v
+		docker compose ps
+	'''}}
 }
 }
 	}
